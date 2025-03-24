@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-123",
+  "timestamp": "2021-01-01T00:00:00Z",
+  "message": [
+    {
+      "type": "text",
+      "content": "Hello, how can I help you?"
+    },
+    {
+      "type": "image",
+      "image_url": {
+        "url":"https://example.com/image.jpg"
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 100,
+    "completion_tokens": 100,
+    "total_tokens": 200
+  }
+}

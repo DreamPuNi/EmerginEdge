@@ -1,0 +1,37 @@
+{
+  "adapters": "openai",
+  "model_name": "gpt-3.5-turbo",
+  "system_prompt": "You are a heloful assistant",
+  "messages": [
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      },
+      {
+        "role": "assistant",
+        "content": "The capital of France is Paris."
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What`s in this image?"
+          },
+          {
+            "type": "image",
+            "image_url": {
+              "url":"https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+  ],
+  "parameters": {
+      "temperature": 0.5,
+      "max_tokens": 100,
+      "top_p": 1,
+      "frequency_penalty": 0,
+      "presence_penalty": 0
+  }
+}
