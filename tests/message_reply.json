@@ -1,4 +1,6 @@
 {
+  "success": true,
+  "task_id": "task-123",
   "id": "chatcmpl-123",
   "timestamp": "2021-01-01T00:00:00Z",
   "message": [

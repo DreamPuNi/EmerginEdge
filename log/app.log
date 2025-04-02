@@ -1,0 +1,67 @@
+[2025-03-25 11:37:21,636] - [model_router:46] - [ERROR] : Error occurred while processing task conversation_with_user_test_01010101:OpenAIAdapter.handle() missing 1 required positional argument: 'self'
+[2025-03-25 11:44:01,321] - [openai_adapter:41] - [ERROR] : OpenAI error: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+[2025-03-25 11:44:03,335] - [openai_adapter:41] - [ERROR] : OpenAI error: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+[2025-03-25 11:44:05,350] - [openai_adapter:41] - [ERROR] : OpenAI error: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+[2025-03-25 11:44:05,350] - [model_router:46] - [ERROR] : Error occurred while processing task conversation_with_user_test_01010101:
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+[2025-03-25 11:53:48,336] - [openai_adapter:43] - [ERROR] : Unexpected error occurred: Completions.create() got an unexpected keyword argument 'tpo_p'
+[2025-03-25 11:53:50,348] - [openai_adapter:43] - [ERROR] : Unexpected error occurred: Completions.create() got an unexpected keyword argument 'tpo_p'
+[2025-03-25 11:53:52,360] - [openai_adapter:43] - [ERROR] : Unexpected error occurred: Completions.create() got an unexpected keyword argument 'tpo_p'
+[2025-03-25 11:53:52,360] - [model_router:46] - [ERROR] : Error occurred while processing task conversation_with_user_test_01010101:Completions.create() got an unexpected keyword argument 'tpo_p'
+[2025-03-25 11:54:05,796] - [openai_adapter:39] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:54:08,148] - [openai_adapter:39] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:54:10,516] - [openai_adapter:39] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:54:10,517] - [model_router:46] - [ERROR] : Error occurred while processing task conversation_with_user_test_01010101:Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:56:19,117] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:57:58,502] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 11:58:20,605] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:07:40,709] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:08:36,195] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:08:38,597] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:09:38,101] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:09:40,518] - [openai_adapter:40] - [ERROR] : OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-2UHt1***************************************BhvQ. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+[2025-03-25 12:14:24,916] - [model_router:46] - [ERROR] : Error occurred while processing task conversation_with_user_test_01010101:'Choice' object has no attribute 'text'
+[2025-03-25 13:13:34,390] - [model_router:43] - [INFO] : Task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 16:00:25,697] - [openai_adapter:38] - [ERROR] : OpenAI error: Connection error.
+[2025-04-01 16:01:03,224] - [openai_adapter:38] - [ERROR] : OpenAI error: Connection error.
+[2025-04-01 16:23:59,030] - [model_router:43] - [INFO] : Task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 16:36:41,236] - [model_router:43] - [INFO] : Task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 16:43:05,771] - [model_router:43] - [INFO] : Task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 17:11:46,946] - [model_router:58] - [INFO] : Task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 18:28:12,100] - [model_router:59] - [INFO] : User yingdaomayi`s task conversation_with_user_test_01010101 processed successfully.
+[2025-04-01 18:29:27,570] - [model_router:59] - [INFO] : User yingdaomayi`s task conversation_with_user_test_01010101 processed successfully.

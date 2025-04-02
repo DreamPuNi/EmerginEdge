@@ -5,14 +5,10 @@ from src.core.utilities.log import logger
 available_settings = {
     # 模型设置
     # openai库参数设置
-    'openai_api_key':"",
-    'openai_base_url':"",
-    'openai_model':"",
-    'openai_temperature':0.5,
-    'openai_max_tokens':100,
-    'openai_top_p':1,
-    'openai_frequency_penalty':0,
-    'openai_presence_penalty':0,
+    "openai_api_key":"",
+    "openai_base_url":"",
+    "chatanywhere_key":"",
+    "chatanywhere_url":""
 }
 
 class Config(dict):

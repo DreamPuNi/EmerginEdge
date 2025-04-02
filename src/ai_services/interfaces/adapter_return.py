@@ -1,21 +1,23 @@
 class FormatAssistantReply():
-    def __init__(self, response):
-        self.response = response
+    def __init__(self):
+        pass
 
-    def clean_response(self, response):
-        text = self.response.choices[0].text['content']
+    def clean_response(self, user_id, task_id, response):
+        generated_message = response.choices[0].message.content
 
         cleaned_response = {
-            "id": response.id,
+            "success": True,
+            "user_id": user_id,
+            "task_id": task_id,
             "timestamp": response.created,
             "message": [],
             "usage": response.usage
         }
 
-        if text:
+        if generated_message:
             cleaned_response["message"].append({
                 "type": "text",
-                "content": text
+                "content": generated_message
             })
 
         return cleaned_response
