@@ -51,6 +51,8 @@ classDiagram
     UserProfile --> PromptOptimizer
 """
 
+# 先检查user_id是否有消息，然后从assistant数据库载入他的提示词，统一弄一个对话模块，然后再在下级进行分类载入
+
 class CustomerPrompt:
     def __init__(self, user_id, task_id):
         self.history = "这里需要根据id从数据库导入所有的消息列表"
