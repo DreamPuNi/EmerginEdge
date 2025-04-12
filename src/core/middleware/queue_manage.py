@@ -31,9 +31,28 @@ class Dequeue(Queue):
         return self.putleft(item, block=False)
 
 def get_msg_queue(maxsize=20):
+    """
+    这里是ai_services里面的queue，主要是存储了与AI通信的实例
+
+    内部序列(user_id, task_id, adapter)：
+        user_id: 当前处理的消息的来源用户
+        task_id: 当前消息的任务id
+        adapter: 当前消息的适配器实例
+    """
     if not hasattr(get_msg_queue, "_instance"):
         get_msg_queue._instance = Dequeue(maxsize)
     return get_msg_queue._instance
+
+def get_dispatch_queue(maxsize=20):
+    """
+    这里是对话系统的分发queue，主要是存储所有用户的新消息序列，不管是发送给ai还是另外的user
+
+    内部消息:
+        直接就是DispatchMessage实例，定义于src.conversation_system.message_instance中
+    """
+    if not hasattr(get_dispatch_queue, "_instance"):
+        get_dispatch_queue._instance = Dequeue(maxsize)
+    return get_dispatch_queue._instance
 
 def get_event_queue(maxsize=20):
     if not hasattr(get_event_queue, "_instance"):

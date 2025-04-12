@@ -8,28 +8,34 @@ DB_PATH = os.path.join(DB_DIR, DB_NAME)
 
 EXPECTED_TABLES = {
     "user": """
-        CREATE TABLE user (
-            user_id TEXT UNIQUE PRIMARY KEY,
-            user_name TEXT NOT NULL,
-            password TEXT NOT NULL,
-            avatar TEXT,
-            gender BOOLEAN,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+        CREATE TABLE "user" (
+            "user_id"	TEXT UNIQUE,
+            "user_name"	TEXT NOT NULL,
+            "avatar"	TEXT,
+            "is_ai"	INTEGER NOT NULL,
+            "system_prompt"	TEXT,
+            "adapter"	TEXT,
+            "model_name"	TEXT,
+            "config_json"	TEXT,
+            "password"	TEXT NOT NULL,
+            "gender"	TEXT,
+            "created_at"	DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY("user_id")
+        )
     """,
     "chat_message": """
-        CREATE TABLE chat_message (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            message_id TEXT UNIQUE,
-            user_id TEXT NOT NULL,
-            room_id TEXT NOT NULL,
-            type INTEGER NOT NULL,
-            is_user BOOLEAN NOT NULL,
-            create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-            content TEXT,
-            FOREIGN KEY(user_id) REFERENCES user(user_id),
-            FOREIGN KEY(room_id) REFERENCES room(room_id)
-        );
+        CREATE TABLE "chat_message" (
+            "id"	INTEGER,
+            "message_id"	TEXT UNIQUE,
+            "user_id"	TEXT NOT NULL,
+            "room_id"	TEXT NOT NULL,
+            "type"	INTEGER NOT NULL,
+            "create_time"	DATETIME DEFAULT CURRENT_TIMESTAMP,
+            "content"	TEXT,
+            PRIMARY KEY("id" AUTOINCREMENT),
+            FOREIGN KEY("room_id") REFERENCES "room"("room_id"),
+            FOREIGN KEY("user_id") REFERENCES "user"("user_id")
+        )
     """,
     "room": """
         CREATE TABLE room (
@@ -37,7 +43,7 @@ EXPECTED_TABLES = {
             name TEXT,
             room_type INTEGER NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+        )
     """,
     "room_member": """
         CREATE TABLE room_member (
@@ -47,7 +53,18 @@ EXPECTED_TABLES = {
             PRIMARY KEY (room_id, user_id),
             FOREIGN KEY (room_id) REFERENCES room(room_id),
             FOREIGN KEY (user_id) REFERENCES user(user_id)
-        );
+        )
+    """,
+    "ai_memory": """
+        CREATE TABLE "ai_memory" (
+            "id"	INTEGER,
+            "ai_user_id"	TEXT NOT NULL,
+            "user_user_id"	TEXT NOT NULL,
+            "user_impression"	TEXT,
+            "supplement_prompt"	TEXT,
+            "narration_prompt"	TEXT,
+            PRIMARY KEY("id" AUTOINCREMENT)
+        )
     """
 }
 

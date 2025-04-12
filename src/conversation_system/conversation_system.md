@@ -5,23 +5,22 @@
 
 ### 入格式
 
+其中sender_type
+> 0：用户
+> 1：AI
+> 2：系统
+
 ```json
 {
   "sender_id": "user_id",
-  "sender_type": "user",
+  "sender_type": 0,
   "receiver_id": "other_user_id",
   "room_id": "room_id",
   "task_type": "first_impression",
-  "message": [
-    {
+  "message":{
       "type": "image",
       "content": "https://example.com/image.png"
     },
-    {
-      "type": "text",
-      "content": "这是什么？"
-    }
-  ],
   "is_group": false,
   "timestamp": 1743495837
 }
@@ -31,7 +30,7 @@
 ```json
 {
   "sender_id": "user_id",
-  "sender_type": "user",
+  "sender_type": 0,
   "receiver_id": "other_user_id",
   "room_id": "room_id",
   "task_type": "first_impression",
@@ -49,8 +48,6 @@
   "timestamp": 1743495837
 }
 ```
-
-> 出的时候如果是AI的消息，那么user_id为什么呢？或者说怎么在数据库区分是人发的还是AI发的
 
 ### 管道格式：交由AI路由进行处理，拿到的返回组装为出格式
 

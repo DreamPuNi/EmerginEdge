@@ -4,7 +4,10 @@ from src.core.utilities.log import logger
 from src.data_management.db_check import DB_PATH
 
 conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
+
+# 更新方法
 
 def upsert_user(user_id, username, password, avatar=None, gender=None):
     try:
@@ -24,12 +27,12 @@ def upsert_user(user_id, username, password, avatar=None, gender=None):
     except Exception as e:
         logger.error(f"User operation failed:{e}")
 
-def insert_chat_message(message_id, user_id, room_id, type, is_user, content):
+def insert_chat_message(message_id, user_id, room_id, type, content):
     try:
         cursor.execute("""
-            INSERT INTO chat_message (message_id, user_id, room_id, type, is_user, create_time, content)
-            VALUES (?,?,?,?,?,?,?)
-        """,(message_id, user_id, room_id, type, is_user, datetime.now(),content))
+            INSERT INTO chat_message (message_id, user_id, room_id, type, create_time, content)
+            VALUES (?,?,?,?,?,?)
+        """,(message_id, user_id, room_id, type, datetime.now(),content))
         conn.commit()
         logger.debug(f"Message {message_id} insert successful.")
     except Exception as e:
@@ -62,11 +65,32 @@ def add_user_to_room(room_id, user_id):
     except Exception as e:
         logger.error(f"User {user_id} add to {room_id} failed:{e}")
 
+def upsert_ai_memory(ai_user_id, user_user_id, user_impression, supplement_prompt, narration_prompt):
+    try:
+        cursor.execute("""
+            INSERT INTO ai_memory (ai_user_id, user_user_id, user_impression, supplement_prompt, narration_prompt)
+            VALUES (?,?,?,?,?)
+            ON CONFLICT(ai_user_id, user_user_id) DO UPDATE SET
+                user_impression = excluded.user_impression,
+                supplement_prompt = excluded.supplement_prompt,
+                narration_prompt = excluded.narration_prompt
+        """, (ai_user_id, user_user_id, user_impression, supplement_prompt, narration_prompt))
+        conn.commit()
+        logger.debug(f"AI memory for {ai_user_id} and {user_user_id} has been added or updated.")
+    except sqlite3.IntegrityError as e:
+        logger.error(f"AI memory operation failed due to integrity issue:{e}.")
+    except Exception as e:
+        logger.error(f"AI memory operation failed:{e}")
+
+# 获取方法
+
 def get_user_info(user_id):
     user_info = None
     try:
         cursor.execute("SELECT * FROM user WHERE user_id = ?", (user_id,))
-        user_info = cursor.fetchone()
+        row = cursor.fetchone()
+        if row:
+            user_info = dict(row)
     except sqlite3.IntegrityError as e:
         logger.error(f"Get user info failed, integrity error:{e}.")
     except Exception as e:
@@ -74,10 +98,11 @@ def get_user_info(user_id):
     return user_info
 
 def get_roomlist_by_userid(user_id):
-    room_list = None
+    room_list = []
     try:
         cursor.execute("SELECT * FROM room_member WHERE user_id = ?", (user_id,))
-        room_list = cursor.fetchall()
+        rows = cursor.fetchall()
+        room_list = [dict(row) for row in rows]
     except sqlite3.IntegrityError as e:
         logger.error(f"Get roomlist by userid failed, integrity error:{e}.")
     except Exception as e:
@@ -88,7 +113,9 @@ def get_room_info(room_id):
     room_info = None
     try:
         cursor.execute("SELECT * FROM room WHERE room_id = ?", (room_id,))
-        room_info = cursor.fetchone()
+        row = cursor.fetchone()
+        if row:
+            room_info = dict(row)
     except sqlite3.IntegrityError as e:
         logger.error(f"Get roominfo failed, integrity error:{e}.")
     except Exception as e:
@@ -99,12 +126,16 @@ def get_message_by_room(room_id):
     chat_history = None
     try:
         cursor.execute("SELECT * FROM chat_message WHERE room_id = ?", (room_id,))
-        chat_history = cursor.fetchall()
+        row = cursor.fetchall()
+        if row:
+            chat_history = [dict(r) for r in row]
     except sqlite3.IntegrityError as e:
         logger.error(f"Get chat history failed, integrity error:{e}.")
     except Exception as e:
         logger.error(f"Get chat history failed:{e}")
     return chat_history
+
+# 删除方法
 
 def delete_user(user_id):
     try:
