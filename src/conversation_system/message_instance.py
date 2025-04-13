@@ -13,6 +13,7 @@ class DispatchMessage:
         self.task_type: str = data.get("task_type", "chat")
         self.is_group: bool = data.get("is_group", False)
         self.timestamp: int = data.get("timestamp", int(datetime.utcnow().timestamp()))
+        self.task_id = ""
 
         m = data.get("message")
         if m["type"] == "text":

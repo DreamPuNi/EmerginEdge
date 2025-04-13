@@ -9,17 +9,18 @@ cursor = conn.cursor()
 
 # 更新方法
 
-def upsert_user(user_id, username, password, avatar=None, gender=None):
+def upsert_user(user_id, username, password, avatar=None, gender=None, is_ai=0):
     try:
         cursor.execute("""
-            INSERT INTO user (user_id, user_name, password, avatar, gender, created_at)
-            VALUES (?,?,?,?,?,?)
+            INSERT INTO user (user_id, user_name, password, avatar, gender, is_ai, created_at)
+            VALUES (?,?,?,?,?,?,?)
             ON CONFLICT(user_id) DO UPDATE SET
                 user_name = excluded.user_name,
                 password = excluded.password,
                 avatar = excluded.avatar,
                 gender = excluded.gender
-        """, (user_id, username, password, avatar, gender, datetime.now()))
+                is_ai = excluded.is_ai,
+        """, (user_id, username, password, avatar, gender,is_ai, datetime.now()))
         conn.commit()
         logger.info(f"User {user_id} has been added or updated.")
     except sqlite3.IntegrityError as e:
@@ -64,6 +65,24 @@ def add_user_to_room(room_id, user_id):
         logger.debug(f"User {user_id} add to {room_id} successful.")
     except Exception as e:
         logger.error(f"User {user_id} add to {room_id} failed:{e}")
+
+def upsert_ai_profile(ai_user_id, adapter, model_name, config_json, system_prompt):
+    try:
+        cursor.execute("""
+            INSERT INTO ai_profile (ai_user_id, adapter, model_name, config_json, system_prompt)
+            VALUES (?,?,?,?,?)
+            ON CONFLICT(ai_user_id) DO UPDATE SET
+                adapter = excluded.adapter,
+                model_name = excluded.model_name,
+                config_json = excluded.config_json,
+                system_prompt = excluded.system_prompt
+        """, (ai_user_id, adapter, model_name, config_json, system_prompt))
+        conn.commit()
+        logger.debug(f"AI profile for {ai_user_id} has been added or updated.")
+    except sqlite3.IntegrityError as e:
+        logger.error(f"AI profile operation failed due to integrity issue:{e}.")
+    except Exception as e:
+        logger.error(f"AI profile operation failed:{e}")
 
 def upsert_ai_memory(ai_user_id, user_user_id, user_impression, supplement_prompt, narration_prompt):
     try:
@@ -125,7 +144,15 @@ def get_room_info(room_id):
 def get_message_by_room(room_id):
     chat_history = None
     try:
-        cursor.execute("SELECT * FROM chat_message WHERE room_id = ?", (room_id,))
+        cursor.execute(
+            """
+            SELECT * FROM chat_message 
+            WHERE room_id = ? 
+            ORDER BY create_time ASC
+            LIMIT 50
+            """,
+            (room_id,)
+        )
         row = cursor.fetchall()
         if row:
             chat_history = [dict(r) for r in row]
@@ -134,6 +161,32 @@ def get_message_by_room(room_id):
     except Exception as e:
         logger.error(f"Get chat history failed:{e}")
     return chat_history
+
+def get_ai_profile(ai_user_id):
+    ai_profile = None
+    try:
+        cursor.execute("SELECT * FROM ai_profile WHERE ai_user_id = ?", (ai_user_id,))
+        row = cursor.fetchone()
+        if row:
+            ai_profile = dict(row)
+    except sqlite3.IntegrityError as e:
+        logger.error(f"Get AI profile failed, integrity error:{e}.")
+    except Exception as e:
+        logger.error(f"Get AI profile failed:{e}")
+    return ai_profile
+
+def get_ai_memory(ai_user_id, user_user_id):
+    ai_memory = None
+    try:
+        cursor.execute("SELECT * FROM ai_memory WHERE ai_user_id = ? AND user_user_id = ?", (ai_user_id, user_user_id))
+        row = cursor.fetchone()
+        if row:
+            ai_memory = dict(row)
+    except sqlite3.IntegrityError as e:
+        logger.error(f"Get AI memory failed, integrity error:{e}.")
+    except Exception as e:
+        logger.error(f"Get AI memory failed:{e}")
+    return ai_memory
 
 # 删除方法
 

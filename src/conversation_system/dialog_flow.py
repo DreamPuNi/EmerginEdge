@@ -5,12 +5,13 @@ from src.data_management.db_manage import *
 from src.conversation_system.message_instance import *
 from src.prompt_engine.build_prompt import BuildPrompt
 from src.core.middleware.queue_manage import get_dispatch_queue
-
-# 先想下如果是新的对话，如何新建并处理对应的数据库和属性数据库
+from src.ai_services.routers.model_router import ai_services_router
 
 class DialogDispatcher:
     def __init__(self):
         self.dispatch_queue = get_dispatch_queue()
+        self.worker_thread = threading.Thread(target=self._handler, daemon=True)
+        self.worker_thread.start()
 
     def _parse_message_to_instance(self, raw_message: dict) -> DispatchMessage:
         """解析消息并返回 DispatchMessage 实例"""
@@ -18,10 +19,15 @@ class DialogDispatcher:
 
     def _handler(self):
         """消息处理线程池，处理消息"""
-        while not self.dispatch_queue.empty():
+        while True:
             message = self.dispatch_queue.get()
-            self._process(message)
-            self.dispatch_queue.task_done()
+            try:
+                self._process(message)
+                logger.info(f"Processed message {message.sender_id} to {message.receiver_id}")
+            except Exception as e:
+                logger.error(f"Error processing message {message.sender_id} to {message.receiver_id}: {e}")
+            finally:
+                self.dispatch_queue.task_done()
 
     def _process(self, message: DispatchMessage):
         """处理消息"""
@@ -43,6 +49,9 @@ class DialogDispatcher:
                 room_id = message.room_id
             message_id = MessageIDGenerator().generate_id()
 
+            message.room_id = room_id
+            message.task_id = message.task_type + "_" + str(message_id)
+
             insert_chat_message(
                 message_id=message_id,
                 user_id=message.sender_id,
@@ -52,25 +61,30 @@ class DialogDispatcher:
             )
 
             if message.receiver_type == UserType.AI:
-                # 这里需要把消息放到AI的队列里
-                # 然后软件根据task_type来决定怎样处理消息
-                # 决定好消息的处理方式，然后开始载入提示词，载入知识库和相关工具
-                # 调用ai_services处理消息
                 if message.task_type == "chat":
                     # TODO:调用build prompt
-                    BuildPrompt
+                    ai_call_parameters = BuildPrompt(message).ai_services_input()
+                    future = ai_services_router.route(ai_call_parameters)
+                    reply = future.result()
+
+                    def process_result(fut):
+                        try:
+                            reply = fut.result()
+                            print("AI回复：", reply)
+                        except Exception as e:
+                            print("发生错误：", e)
+
+                    future.add_done_callback(process_result)
                 pass
             elif message.receiver_type == UserType.USER:
-                # 这里需要把消息放到用户的队列里
-                # 然后软件根据task_type来决定怎样处理消息
-                # 将处理完成后的消息放到用户的队列里
-                # 然后调用用户的消息处理器
                 pass
 
     def dispatch(self, enter_message: dict):
         """接受进入的消息并传递到队列"""
         parsed_message = self._parse_message_to_instance(enter_message)
+        logger.info(f"Dispatching message: {parsed_message.sender_id} to {parsed_message.receiver_id}")
         self.dispatch_queue.put(parsed_message)
+        self.worker_thread.join()
 
 class MessageIDGenerator:
     """消息ID生成器"""
