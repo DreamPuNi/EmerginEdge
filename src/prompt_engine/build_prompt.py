@@ -2,8 +2,6 @@ import json
 from src.core.utilities.log import logger
 from src.conversation_system.message_instance import *
 from src.data_management.db_manage import get_ai_profile, get_ai_memory, get_message_by_room
-from src.prompt_engine.custom_prompt import system_prompt
-
 
 class BuildPrompt:
     def __init__(self, message: DispatchMessage):
@@ -30,16 +28,19 @@ class BuildPrompt:
         """
         )
 
+        self._check_ai_memory()
+
+    def _check_ai_memory(self):
         ai_memory = get_ai_memory(self.target_id, self.sender_id)
-        if ai_memory is None:
+        try:
+            self.user_impression = ai_memory.get("user_impression", "")
+            self.supplement_prompt = ai_memory.get("supplement_prompt", "")
+            self.narration_prompt = ai_memory.get("narration_prompt", "")
+        except:
             logger.error(f"AI memory not found for {self.target_id} and {self.sender_id}.")
             self.user_impression = ""
             self.supplement_prompt = ""
             self.narration_prompt = ""
-        else:
-            self.user_impression = ai_memory.get("user_impression", "")
-            self.supplement_prompt = ai_memory.get("supplement_prompt", "")
-            self.narration_prompt = ai_memory.get("narration_prompt", "")
 
     def _build_system_prompt(self):
         """构建系统提示词"""
@@ -101,5 +102,5 @@ class BuildPrompt:
             "message": self._build_history(),
             "parameters": parameters,
         }
-
+        logger.debug(f"AI services input: {pull_up}")
         return pull_up

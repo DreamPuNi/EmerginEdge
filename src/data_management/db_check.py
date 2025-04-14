@@ -63,7 +63,18 @@ EXPECTED_TABLES = {
             "user_impression"	TEXT,
             "supplement_prompt"	TEXT,
             "narration_prompt"	TEXT,
-            PRIMARY KEY("id" AUTOINCREMENT)
+            UNIQUE(ai_user_id, user_user_id)
+        )
+    """,
+    "ai_profile": """
+        CREATE TABLE "ai_profile" (
+            "ai_user_id"	TEXT,
+            "adapter"	TEXT,
+            "model_name"	TEXT,
+            "config_json"	TEXT,
+            "system_prompt"	TEXT,
+            PRIMARY KEY("ai_user_id"),
+            FOREIGN KEY("ai_user_id") REFERENCES "user"("user_id")
         )
     """
 }

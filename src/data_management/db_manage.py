@@ -182,6 +182,13 @@ def get_ai_memory(ai_user_id, user_user_id):
         row = cursor.fetchone()
         if row:
             ai_memory = dict(row)
+        else:
+            logger.debug(f"No AI memory found for {ai_user_id} and {user_user_id}.")
+            upsert_ai_memory(ai_user_id, user_user_id, "", "", "")
+            cursor.execute("SELECT * FROM ai_memory WHERE ai_user_id = ? AND user_user_id = ?", (ai_user_id, user_user_id))
+            row = cursor.fetchone()
+            if row:
+                ai_memory = dict(row)
     except sqlite3.IntegrityError as e:
         logger.error(f"Get AI memory failed, integrity error:{e}.")
     except Exception as e:
